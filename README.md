@@ -16,10 +16,10 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
 * apt update
 * apt upgrade
 * pkg install git
+* pkg install python3
 * pkg install x11-repo
 * pkg install toor-repo
 * pkg install chromium
-* pkg install python3
 * git clone https://github.com/harkerbyte/linux-monster
 * bash setup.sh -f requirements.txt
   
