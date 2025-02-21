@@ -3,5 +3,5 @@
 Ethical Facebook and Gmail password cracker... Bonus, proxy rotation for every attack based on user preference setting and also a web scrapping tool
 
 ### Disclaimer 
-<b>I disclaim responsibility of how this tool is used, users are responsible with ensuring compliance with with legal and ethical guidelines. Proceed responsibly</b>
+<b>I disclaim responsibility of how this tool is used, users are responsible for ensuring compliance with legal and ethical guidelines. Proceed responsibly.</b>
 ```- Shade```
