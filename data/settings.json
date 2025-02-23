@@ -2,5 +2,6 @@
     "settings":,
     "proxy":,
     "username":,
-    "email address":
+    "email address":,
+    "password path": "data/passwords.txt"
 }

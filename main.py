@@ -45,50 +45,7 @@ def proxy_status():
     else:
       return f'{red} OFF {plain}'
         
-def open_settings(modify = False):
-  if not modify:
-    ackn_setting = settings[1].split(':')
-    if not "true" in ackn_setting[1]:
-      set_proxy = setting[2].split(':')
-      set_ = input(f'{yellow}WOULD YOU LIKE TO USE PROXY ON EVERY JOB [YES | NO] : {plain}\n').lower()
-      if set_ == "yes":
-        with open('data/proxy.txt', 'r') as op_file:
-          not_empty = op_file.readlines()
-          if not_empty:
-            set_proxy[1] = True
-          else:
-            set_proxy[1] = False
-      else:
-        set_proxy[1] = False
-          
-      set_username = settings[3].split(':')
-      session_username = input(f'{yellow}ENTER A USERNAME TO REMEMBER YOU BY LATER : {plain}\n').lower()
-      if session_username != "":
-        set_username[1] = session_username
-      else:
-        set_username[1] = "user"
-          
-      email_set = settings[4].split(':')
-      set_email = input(f'{yellow}ENTER YOUR EMAIL ADDRESS FOR RECEIVING MAILS : {plain}\n').lower().strip()
-      if set_email != "":
-          pattern = r"^[a-zA-Z0-9_+-]+@[a-zA-Z0-9_+]+\.[a-z]{2,}$"
-          if re.search(pattern, set_email):
-            email_set[1] = set_email
-          else:
-            email_set[1] = 'placeholder@gmail.com'
-            
-      ackn_setting[1] = True
-      if ackn_setting[1]:
-        setting_dict = {
-          "settings":ackn_setting[1],
-          "proxy": set_proxy[1],
-          "username":set_username[1].strip(),
-          "email address":email_set[1].strip(),
-        }
-        with open('data/settings.json', 'w') as setting_conf:
-          json.dump(setting_dict, setting_conf, indent = 4)
-          
-  else:
+def open_settings(modify):
     ackn_setting = settings[1].split(':')
     if ackn_setting[1] != "false":
       while modify == True:
@@ -98,7 +55,8 @@ def open_settings(modify = False):
         [1] 𝙿𝚛𝚘𝚡𝚢
         [2] 𝙲𝚑𝚊𝚗𝚐𝚎 𝚞𝚜𝚎𝚛𝚗𝚊𝚖𝚎     
         [3] 𝙲𝚑𝚊𝚗𝚐𝚎 𝚖𝚊𝚒𝚕 𝚊𝚍𝚍𝚛𝚎𝚜𝚜
-        [4] 𝚂𝚊𝚟𝚎 𝚜𝚎𝚝𝚝𝚒𝚗𝚐𝚜
+        [4] 𝙲𝚑𝚊𝚗𝚐𝚎 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍 𝚏𝚒𝚕𝚎
+        [5] 𝚂𝚊𝚟𝚎 𝚜𝚎𝚝𝚝𝚒𝚗𝚐𝚜
             
         𝙴𝚗𝚝𝚎𝚛 : {plain}'''
         like_to = input(textwrap.dedent(setting_var))
@@ -122,8 +80,8 @@ def open_settings(modify = False):
         elif "2" in like_to:
           username_setting = settings[3].split(':')
           current_username = username_setting[1].strip()
-          print(f'CURRENT USERNAME : {blue}{current_username}{plain}')
-          change_user = input('Would you like to change your username [YES | NO] : ').strip().lower()
+          print(f'Current username : {blue}{current_username}{plain}')
+          change_user = input('Would you like to change your username [Yes | No] : ').strip().lower()
           if change_user in ["y", "yes"]:
             new_username = input('Enter your new username : ')
             username_setting[1] = new_username
@@ -133,25 +91,56 @@ def open_settings(modify = False):
           email_setting = settings[4].split(':')
           current_email = email_setting[1].strip()
           print(f'Your current email: {blue}{current_email}{plain}')
-          change_email = input('WOULD YOU LIKE TO CHANGE THIS [YES | NO] : ').strip().lower()
+          change_email = input('Would you like to change this [Yes | No] : ').strip().lower()
           if change_email == "yes":
             changing = True
             while changing:
-              new_email = input('ENTER A NEW EMAIL ADDRESS : \n')
+              new_email = input('Enter new email address : \n')
               pattern = r"^[a-zA-Z0-9_+.]+@[a-zA-Z0-9_+]+\.[a-z]{2,3}$"
               if re.search(pattern, new_email):
                 email_setting[1] = new_email
                 changing = False
               else:
-                print(f'\n{red_bg}THAT WASN\"T AN EMAIL ADDRESS YOU DORK!!!{plain}')
+                print(f'\n{red_bg}That wasn\'t an email address!!!{plain}')
           elif change_email == "no":
             pass
         elif "4" in like_to:
+          path_setting, path = settings[5].split(':')
+          pass_holder = f"""
+          Current password file : {path.strip().split('/')[1][:-1]}
+          Your new password file must be located in the data folder
+          """
+          print(f'{blue}{textwrap.dedent(pass_holder)} {plain}')
+          changing = True
+          while changing:
+            change = input('Change your password path [Yes | No] : ').lower()
+            if change == "yes":
+              new_path = input('New password file name [File_name.txt] : ').strip()
+              file, ext =  os.path.splitext(new_path)
+              if ext == '.txt':
+                if not os.path.exists(f'data/{new_path}'):
+                  print(f'{red}{new_path} not found{plain}')
+                else:
+                  with open(f'data/{new_path}', 'r') as content:
+                    cont_ = [line.strip() for line in content.readlines() if line.strip()]
+                    if len(cont_) == 0:
+                      print(f'{red}{new_path} is an empty document, try again{plain}')
+                    else:
+                      content.close()
+                      path_setting = settings[5].split(':')
+                      path_setting[1] = f"data/{new_path}"
+                      changing = False
+              else:
+                print(f'{red}Provide a valid .txt document {plain}')
+            else:
+              changing = False
+        elif "5" in like_to:
           default_setting = {
           "settings": True,
           "proxy": settings[2].split(':')[1].strip() == "true",
           "username":settings[3].split(':')[1].replace(",", "").strip('"').strip().strip('"'),
           "email address":settings[4].split(':')[1].replace(",", "").strip('"').strip().strip('"'),
+          "password path":settings[5].split(':')[1].replace(",","").strip('"').strip().strip('"')
           }
    
           try:
@@ -169,6 +158,11 @@ def open_settings(modify = False):
               default_setting.update({"email address":sanitize_json_str(email_setting[1])})
           except UnboundLocalError:
             pass
+          try:
+            if path_setting[1]:
+              default_setting.update({"password path" : sanitize_json_str(path_setting[1])})
+          except UnboundLocalError:
+            pass
    
           with open('data/settings.json', 'w') as setting_con:
             json.dump(default_setting,setting_con,indent = 4)
@@ -178,7 +172,6 @@ def open_settings(modify = False):
         elif 'exit' in like_to:
           modify = False
   
-open_settings()
     
 def check_connection():
   try:
@@ -286,7 +279,8 @@ def main():
         options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
         tar = input(f'{yellow}>>> ').lower()
         if tar in ['google','1']:
-          with open('data/passwords.txt', 'r') as file:
+          password_file = settings[4].split(':')[1]
+          with open(password_file, 'r') as file:
             pass_ = file.readlines()
           caught_proxy = onload_proxy()
           if caught_proxy is not None:
@@ -365,8 +359,8 @@ def main():
             print(f'\r{plain}𝙻𝚘𝚊𝚍𝚒𝚗𝚐 {green}{load[l]}{plain}', end = '', flush = True)
             time.sleep(0.3)
             l += 1
-          
-          with open('data/passwords.txt', 'r') as passwords:
+          password_file = settings[4].split(':')[1]
+          with open(password_file, 'r') as passwords:
             pass_ = passwords.readlines()
           
           username_email = input(f'\n{yellow}[𝙴𝚖𝚊𝚒𝚕 𝚊𝚍𝚍𝚛𝚎𝚜𝚜 𝚘𝚛 𝚙𝚑𝚘𝚗𝚎 𝚗𝚞𝚖𝚋𝚎𝚛] >>> {plain}')
@@ -546,10 +540,10 @@ def main():
                       
                   if each_element.startswith('-'):
                     file_name = each_element[1:]
-                    if not os.path.exists('cache/html'):
-                      os.mkdir('cache/html')
+                    if not os.path.exists('cache/skinner'):
+                      print(f'{red}Parent folder not found{plain}')
                     
-                    with open(f'cache/html/{file_name}', 'w') as file:
+                    with open(f'cache/skinner/{file_name}', 'w') as file:
                       j = 0
                       while j < len(elements_extracted):
                         file.write(f'{bs.prettify(elements_extracted[j])}\n')
