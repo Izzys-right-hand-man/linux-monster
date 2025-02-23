@@ -26,4 +26,4 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
  git clone https://github.com/harkerbyte/linux-monster
  bash setup.sh -f requirements.txt
 ``` 
-<video title="setup on youtube" source="" > </video>
+[![SETUP TUTORIAL YT](https://img.youtube.com/vi/cc9UuUCDr4E/0.jpg)](https://www.youtube.com/watch?v=cc9UuUCDr4E)
