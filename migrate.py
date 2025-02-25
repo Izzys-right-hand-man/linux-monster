@@ -88,7 +88,7 @@ if os.path.exists(file_name):
   with open(file_name, 'r') as proxy_file:
     proxies = [line.strip() for line in proxy_file.readlines() if line.strip()]
   
-  uni_url = 'https://example.com'
+  uni_url = 'https://facebook.com'
   def migrate_proxy(proxy):
     with open(mv_to_path, 'a') as migrating:
       try:
