@@ -28,3 +28,54 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
 ```
 [![SETUP TUTORIAL YT](https://img.youtube.com/vi/cc9UuUCDr4E/0.jpg)](https://www.youtube.com/watch?v=cc9UuUCDr4E&feature=youtu.be)
 <b>Full YouTube tutorial on how to setup Linux-Monster</b>
+
+
+<div id="socials" >
+  <h3>Socials</h3>
+</div>
+
+<div id="support" >
+  <h3>Support</h5>
+  For users who have concluded with the installation process...
+  <b>Here are the content of the tool package and how to use</b>
+  
+  
+ <p> <b>Main</b> : This is the software's power house, contains every attack job the package could possibly offer. It's interface is made simple for users to navigate.</p>
+  <p><b> Exit </b> : you know, when and how to use this one as it is global</p>
+
+  
+  <p> <b>Migrate</b> : This should be the next thing you touch, incase you have decide to enable proxy. It interface is also made simple for users to comprehend, consider it a native proxy formatter.
+  
+  Trust me, only this can format your imported proxies to what main.py can understand and work with</p>
+
+
+  <p> <b>Server (unstable)</b> : This is specifically made for brute force attacks only when proxy is enabled. For the best performance, be sure you have provided migrate with premium proxies. Otherwise, you are likely to face proxy issues</p>
+  <table>
+    <tr>
+      <th>
+        Pros
+      </th>
+      <th>
+        Cons
+      </th>
+    </tr>
+    <tr>
+      <td>
+        Speed : In this scenario, you're simply running a local proxy server. Which ensures equal speed and privacy, as you can monitor the logs of what requests come in and the responses that are sent out.
+      </td>
+      <td>
+        Heavy : it consumes a massive amount of resources to keep its connections stable and accurate, which could lead to lag for low-end users, or even force quits.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Interoperability: a friend of yours who is close by has the server running? You can use his/her server to save yourself a wealth of resources by making sure you both are on the same WiFi network.
+      </td>
+      <td>
+        Heavier : as the server has to run multiple requests, this could result in increased resource usage. This could overall ruin your relationship in case you never informed the other party beforehand.
+      </td>
+    </tr>
+    
+  </table>
+
+</div>
