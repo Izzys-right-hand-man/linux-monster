@@ -40,16 +40,17 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
 <div id="support" >
   <h3>Support</h5>
   For users who have concluded with the installation process...
-  <b>Here are the content of the tool package and how to use</b>
+  <b>Here are the contents of the tool package and how to use it.</b>
   
   
- <p> <b>Main</b> : This is the software's power house, contains every attack job the package could possibly offer. It's interface is made simple for users to navigate.</p>
-  <p><b> Exit </b> : you know, when and how to use this one as it is global</p>
+
+ <p> <b>Main</b> : This is the software's power house, containing every attack job the package could possibly offer. Its interface is made simple for users to navigate. </p>
+  <p><b> Global keyword - exit </b></p>
 
   
   <p> <b>Migrate</b> : This should be the next thing you touch, incase you have decide to enable proxy. It interface is also made simple for users to comprehend, consider it a native proxy formatter.
   
-  Trust me, only this can format your imported proxies to what main.py can understand and work with</p>
+  Trust me, only this can refactor your imported proxies to a format that main.py can understand and work with.</p>
 
 
   <p> <b>Server (unstable)</b> : This is specifically made for brute force attacks only when proxy is enabled. For the best performance, be sure you have provided migrate with premium proxies. Otherwise, you are likely to face proxy issues</p>
