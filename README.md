@@ -37,6 +37,7 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
 <a href = "https://facebook.com/harkerbyte">![Facebook](https://img.shields.io/badge/Facebook-%231877F2.svg?style=for-the-badge&logo=Facebook&logoColor=white)</a>
 <a href ="https://youtube.com/@harkerbyte?si=aPSIREosLJlFOmyX" >![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white)</a>
 
+
 <div id="support" >
   <h3>Support</h5>
   For users who have concluded with the installation process...
@@ -51,7 +52,7 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
 
 ![1000078424](https://github.com/user-attachments/assets/fd22240c-9b01-4a09-9fe8-b2ef17f1e943)
   
-  <p> <b>Migrate</b> : This should be the next thing you touch, incase you have decide to enable proxy. It interface is also made simple for users to comprehend, consider it a native proxy formatter.
+  <p> <b>Migrate</b> : This should be the next thing you touch, incase you have decided to enable proxy. It interface is also made simple for users to comprehend, consider it a native proxy formatter.
   
   Trust me, only this can refactor your imported proxies to a format that main.py can understand and work with.</p>
 
@@ -87,4 +88,61 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
   </table>
 
 </div>
-
+<table>
+  <caption id="challenge" >Community Goal </caption>
+  <tr>
+    <th>
+      Target
+    </th>
+    <th>
+      Benefit
+    </th>
+    <th>
+      Achieved
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <b>YouTube reaches 500 subscribers</b>
+    </td>
+    <td>
+      The tool gets a custom password generator
+    </td>
+    <td>
+      💤
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <b>YouTube reaches 3k subscribers</b>
+    </td>
+    <td>
+      Double or even triple the game : brute becomes 3× faster
+    </td>
+    <td>
+      💤
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <b>YouTube reaches 5k subscribers</b>
+    </td>
+    <td>
+      Hosting a proxy server on cloud, to supply users with premium proxies. Cost - free 
+    </td>
+    <td>
+      💤
+    </td>
+  </tr>
+  <tr>
+    <td>
+      💤
+    </td>
+    <td>
+       💤
+    </td>
+    <td>
+      💤
+    </td>
+  </tr>
+</table>
