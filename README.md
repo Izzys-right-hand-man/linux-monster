@@ -30,9 +30,12 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
 <b>Full YouTube tutorial on how to setup Linux-Monster</b>
 
 
-<div id="socials" >
-  <h3>Socials</h3>
-</div>
+<p id="socials" ></p>
+
+### Socials
+
+<a href = "https://facebook.com/harkerbyte">![Facebook](https://img.shields.io/badge/Facebook-%231877F2.svg?style=for-the-badge&logo=Facebook&logoColor=white)</a>
+<a href ="https://youtube.com/@harkerbyte?si=aPSIREosLJlFOmyX" >![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white)</a>
 
 <div id="support" >
   <h3>Support</h5>
