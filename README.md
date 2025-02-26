@@ -30,9 +30,9 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
 <b>Full YouTube tutorial on how to setup Linux-Monster</b>
 
 
-<p id="socials" ></p>
+<div id="socials" ><h3>Reach out</h3> 
+</div>
 
-### Socials
 
 <a href = "https://facebook.com/harkerbyte">![Facebook](https://img.shields.io/badge/Facebook-%231877F2.svg?style=for-the-badge&logo=Facebook&logoColor=white)</a>
 <a href ="https://youtube.com/@harkerbyte?si=aPSIREosLJlFOmyX" >![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white)</a>
@@ -43,15 +43,19 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
   <b>Here are the contents of the tool package and how to use it.</b>
   
   
+![1000078428](https://github.com/user-attachments/assets/86ca209f-cfa0-4927-8173-9511e15c584f)
 
  <p> <b>Main</b> : This is the software's power house, containing every attack job the package could possibly offer. Its interface is made simple for users to navigate. </p>
   <p><b> Global keyword - exit </b></p>
+  <b>Every password found is saved in data/temps.txt</b>
 
+![1000078424](https://github.com/user-attachments/assets/fd22240c-9b01-4a09-9fe8-b2ef17f1e943)
   
   <p> <b>Migrate</b> : This should be the next thing you touch, incase you have decide to enable proxy. It interface is also made simple for users to comprehend, consider it a native proxy formatter.
   
   Trust me, only this can refactor your imported proxies to a format that main.py can understand and work with.</p>
 
+![1000078431](https://github.com/user-attachments/assets/35f9900c-f94a-4ce4-b6ba-5314d7d61c36)
 
   <p> <b>Server (unstable)</b> : This is specifically made for brute force attacks only when proxy is enabled. For the best performance, be sure you have provided migrate with premium proxies. Otherwise, you are likely to face proxy issues</p>
   <table>
@@ -83,3 +87,4 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
   </table>
 
 </div>
+
