@@ -8,7 +8,7 @@ Got a few more tricks in its arsenal, you should go find out.
 
 The codes are dynamic, ensuring the software's capability to receive updates in the future as development proceeds. 
 
-<a href="challenge">Community Goal 🗿</a>
+<a href="#challenge">Community Goal 🗿</a>
 ### Setup
 Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages/com.termux/" >F-droid</a>
 
