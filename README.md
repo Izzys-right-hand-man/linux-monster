@@ -8,6 +8,7 @@ Got a few more tricks in its arsenal, you should go find out.
 
 The codes are dynamic, ensuring the software's capability to receive updates in the future as development proceeds. 
 
+<a href="challenge">Community Goal 🗿</a>
 ### Setup
 Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages/com.termux/" >F-droid</a>
 
@@ -15,6 +16,7 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
 
 <b>Use the enter key to select.</b>
   Once that has been concluded, proceed with the following commands
+  
 ```  
  apt update
  apt upgrade
@@ -26,6 +28,7 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
  git clone https://github.com/harkerbyte/linux-monster
  bash setup.sh -f requirements.txt
 ```
+
 [![SETUP TUTORIAL YT](https://img.youtube.com/vi/cc9UuUCDr4E/0.jpg)](https://www.youtube.com/watch?v=cc9UuUCDr4E&feature=youtu.be)
 <b>Full YouTube tutorial on how to setup Linux-Monster</b>
 
@@ -47,10 +50,13 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
 ![1000078428](https://github.com/user-attachments/assets/86ca209f-cfa0-4927-8173-9511e15c584f)
 
  <p> <b>Main</b> : This is the software's power house, containing every attack job the package could possibly offer. Its interface is made simple for users to navigate. </p>
-  <p><b> Global keyword - exit </b></p>
+  <p><b> Global keyword - exit </b></br>
   <b>Every password found is saved in data/temps.txt</b>
+  </p>
+  
 
-![1000078424](https://github.com/user-attachments/assets/fd22240c-9b01-4a09-9fe8-b2ef17f1e943)
+![1000078602](https://github.com/user-attachments/assets/cc4e1f78-0500-48b1-b67f-10cee1751ae4)
+
   
   <p> <b>Migrate</b> : This should be the next thing you touch, incase you have decided to enable proxy. It interface is also made simple for users to comprehend, consider it a native proxy formatter.
   
@@ -59,6 +65,7 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
 ![1000078431](https://github.com/user-attachments/assets/35f9900c-f94a-4ce4-b6ba-5314d7d61c36)
 
   <p> <b>Server (unstable)</b> : This is specifically made for brute force attacks only when proxy is enabled. For the best performance, be sure you have provided migrate with premium proxies. Otherwise, you are likely to face proxy issues</p>
+  <kbd>CTRL + C</kbd> To close server when not in use
   <table>
     <tr>
       <th>
@@ -86,8 +93,11 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
     </tr>
     
   </table>
+<p><b>Monster.log</b> : Monster.log: Here are the logs of every error encountered during jobs. Please make sure to provide this when reaching out to report an error that is out of scope. Possible: tracebacks. </p>
 
+<p><b>Update</b> : Run this from time to time, to make sure your copy is up to date. </p>
 </div>
+
 <table>
   <caption id="challenge" >Community Goal </caption>
   <tr>
