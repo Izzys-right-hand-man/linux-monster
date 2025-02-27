@@ -3,6 +3,7 @@ from flask import Flask, request
 import requests
 from main import onload_proxy
 import logging 
+import os
 
 app = Flask(__name__)
 @app.route("/", defaults = {"path" : ""})
@@ -10,7 +11,7 @@ app = Flask(__name__)
 @app.route("/<path:path>", methods = ["GET", "POST"])
 def proxy(path):
   if not path.startswith('https://') and not path.startswith('http://'):
-    path =  f'http://{path}'
+    path =  f'https://{path}'
   
   print(path)
   headers = {
@@ -37,12 +38,13 @@ def proxy(path):
     else:
       response = requests.get(path, proxies = {'https' : proxy_url, 'http' : proxy_url}, headers = headers, params = request.args)
     
-    if response.status_code == 200:
-      return response.content
+    
+    return response.content
       
   except Exception as error:
     onload_proxy(pop = proxy_now)
     return f"Error : {error}"
     
 if __name__ == "__main__":
+  os.system('cls' if os.name == 'nt' else 'clear')     
   app.run(host='127.0.0.1', port = 8000)

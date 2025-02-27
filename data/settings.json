@@ -1,7 +1,7 @@
 {
-    "settings": true,
-    "proxy": true,
-    "username": "",
-    "email address": "",
+    "settings":,
+    "proxy":,
+    "username":"",
+    "email address":"",
     "password path": "data/passwords.txt"
 }

@@ -7,7 +7,7 @@ from datetime import timedelta
 import concurrent.futures as CF
 from main import red,yellow,green,blue,plain
 
-
+os.system('cls' if os.name == 'nt' else 'clear')     
 def refactor(protocol, value, list_, auth_re, save):
   protocol.strip()
   value.strip()
@@ -43,21 +43,24 @@ def refactor(protocol, value, list_, auth_re, save):
     return None
 
 banner = f"""
-.---.              _        .-.
-: .; :            :_;      .' `.
-:   .' .--.  .--. .-. .--. `. .'.--.  .--.  .--.
-: :.`.' '_.'' .; :: :`._-.' : : : ..'' .; ; : ..'
-:_;:_;`.__.'`._. ;:_;`.__.' :_; :_;  `.__,_;:_;
-             .-. :
-             `._.'
+.-..-. _                    .-.
+: `' ::_;                  .' `.
+: .. :.-. .--. .--.  .--.  `. .' .--.
+: :; :: :' .; :: ..'' .; ;  : : ' '_.'
+:_;:_;:_;`._. ;:_;  `.__,_; :_; `.__.'
+          .-. :
+          `._.'
 SUPPORTED FORMATS            
 [1] address:port
 [2] username:password:address:port
 [3] address:port:username:password
+[4] exit
 """
 print(banner)
 
 value = str(input('Format : ').strip())
+if value == '4' or value == 'exit':
+  sys.exit()
 protocol = str(input('Protocol : ').lower())
 auth_re = False
 if protocol == "https":
@@ -133,7 +136,7 @@ if os.path.exists(file_name):
           print(f'{red}Connection blocked / Slow internet{plain}')
         if 'Connection broken' in error:
           print(f'{red}Connection interrupted{plain}')
-        if 'Please check proxy URL' in error:
+        if 'check proxy URL' in error:
           print(f'{red}You\'ve choosen the wrong format.')
         else:
           print(red+error+plain)
@@ -146,7 +149,7 @@ if os.path.exists(file_name):
     if len(registry.readlines()) == 0:
       print(f'{red}Confirm that you have choosen the correct format, then try again{plain}')
     else:
-      print('Operation complete')
+      print('\nOperation complete')
     
 else:    
   print(f'{red}{file_name} not found{plain}')

