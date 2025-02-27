@@ -8,7 +8,7 @@ Got a few more tricks in its arsenal, you should go find out.
 
 The codes are dynamic, ensuring the software's capability to receive updates in the future as development proceeds. 
 
-<a href="#challenge">Community Goal 🗿</a>
+<a href="https://github.com/harkerbyte/linux-monster#challenge">Community Goal 🗿</a>
 ### Setup
 Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages/com.termux/" >F-droid</a>
 
@@ -93,13 +93,15 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
     </tr>
     
   </table>
-<p><b>Monster.log</b> : Monster.log: Here are the logs of every error encountered during jobs. Please make sure to provide this when reaching out to report an error that is out of scope. Possible: tracebacks. </p>
+<p><b>Monster.log</b> : Monster.log: Here are the logs of every error encountered during attack jobs. Please make sure to provide this when reaching out to report an error that is out of scope. Possible: tracebacks. </p>
+
+![1000078604](https://github.com/user-attachments/assets/22478817-b7a9-49cf-b285-e8f993768085)
 
 <p><b>Update</b> : Run this from time to time, to make sure your copy is up to date. </p>
 </div>
 
-<table>
-  <caption id="challenge" >Community Goal </caption>
+<table id="challenge" >
+  <caption>Community Goal </caption>
   <tr>
     <th>
       Target
