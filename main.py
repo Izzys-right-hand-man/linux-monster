@@ -247,6 +247,7 @@ def proxy_errorV(errorLogged = None, terminate = None):
       
     
 def main(): 
+  os.system('cls' if os.name == 'nt' else 'clear') 
   password_file = settings[5].split(':')[1]
   logging.basicConfig(filename='monster.log', format = "%(asctime)s - %(levelname)s - %(message)s")
   
@@ -655,12 +656,16 @@ def main():
       
     elif command.lower() in ['dev', 'developer']:
       subprocess.run(['xdg-open', 'https://github.com/harkerbyte'])
-    elif command.lower() in ['exit']:
+      
+    elif command.lower() == 'clear':
+      os.system('cls' if os.name == 'nt' else 'clear')
+      main()  
+      
+    elif command.lower() == 'exit':
       command = False
       os.system('cls' if os.name == 'nt' else 'clear')
       break
     
-  
+      
 if __name__ == "__main__":
-  os.system('cls' if os.name == 'nt' else 'clear') 
   main()
