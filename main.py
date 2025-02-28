@@ -663,7 +663,6 @@ def main():
       
     elif command.lower() == 'exit':
       command = False
-      os.system('cls' if os.name == 'nt' else 'clear')
       break
     
       
