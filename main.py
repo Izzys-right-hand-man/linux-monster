@@ -656,10 +656,7 @@ def main():
       
     elif command.lower() in ['dev', 'developer']:
       subprocess.run(['xdg-open', 'https://github.com/harkerbyte'])
-      
-    elif command.lower() == 'clear':
-      os.system('cls' if os.name == 'nt' else 'clear')
-      main()  
+
       
     elif command.lower() == 'exit':
       command = False
