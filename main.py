@@ -350,7 +350,7 @@ def main():
               except selenium.common.exceptions.TimeoutException:
                 
                 page_ = bs(driver.page_source, 'html.parser').text
-                print(page_)
+               
                 if r"Couldn’t find your Google Account" in page_:
                   print(f'{red}Couldn\'t find the google account {email_or_phone}{plain}')
                   driver.quit()
