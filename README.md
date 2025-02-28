@@ -47,7 +47,8 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
   <b>Here are the contents of the tool package and how to use it.</b>
   
   
-![1000078428](https://github.com/user-attachments/assets/86ca209f-cfa0-4927-8173-9511e15c584f)
+![1000079315](https://github.com/user-attachments/assets/39bd4e51-ef88-4569-8f19-60450a9eca58)
+
 
  <p> <b>Main</b> : This is the software's power house, containing every attack job the package could possibly offer. Its interface is made simple for users to navigate. </p>
   <p><b> Global keyword - exit </b></br>
@@ -95,10 +96,12 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
   </table>
 <p><b>Monster.log</b> : Monster.log: Here are the logs of every error encountered during attack jobs. Please make sure to provide this when reaching out to report an error that is out of scope. Possible: tracebacks. </p>
 
-![1000078604](https://github.com/user-attachments/assets/22478817-b7a9-49cf-b285-e8f993768085)
+![1000079316](https://github.com/user-attachments/assets/6c8e0c71-c251-4f28-99d3-5c2a0a72593f)
 
 <p><b>Update</b> : Run this from time to time, to make sure your copy is up to date. </p>
 </div>
+
+
 
 <table id="challenge" >
   <caption>Community Goal </caption>
