@@ -29,7 +29,7 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
  bash setup.sh -f requirements.txt
 ```
 
-[![SETUP TUTORIAL YT](https://img.youtube.com/vi/cc9UuUCDr4E/0.jpg)](https://www.youtube.com/watch?v=cc9UuUCDr4E&feature=youtu.be)
+[![SETUP TUTORIAL YT](https://github.com/harkerbyte/linux-monster/blob/06f6a0867368aa5b0ec853f38253da9409e1399a/data/IMG_20250302_182932.png)](https://www.youtube.com/watch?v=cc9UuUCDr4E&feature=youtu.be)
 <b>Full YouTube tutorial on how to setup Linux-Monster</b>
 
 
@@ -47,7 +47,7 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
   <b>Here are the contents of the tool package and how to use it.</b>
   
   
-[![Termux brute force tool - working 100%](https://img.youtube.com/vi/wHOM4xd9dsM/0.jpg)](https://www.youtube.com/watch?v=wHOM4xd9dsM)
+[![Termux brute force tool - working 100%](https://github.com/harkerbyte/linux-monster/blob/06f6a0867368aa5b0ec853f38253da9409e1399a/data/IMG_20250302_183022.png)](https://www.youtube.com/watch?v=wHOM4xd9dsM)
 
  <p> <b>Main</b> : This is the software's power house, containing every attack job the package could possibly offer. Its interface is made simple for users to navigate. </p>
   <p><b> Global keyword - exit </b></br>
