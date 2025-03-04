@@ -1,4 +1,8 @@
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/harkerbyte/linux-monster?style=for-the-badge)
+![GitHub followers](https://img.shields.io/github/followers/harkerbyte?style=for-the-badge&logo=Github)
+
+![GitHub Repo stars](https://img.shields.io/github/stars/harkerbyte/linux-monster?style=for-the-badge&logo=Github)
+
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/harkerbyte/linux-monster?style=for-the-badge&logo=Github)
 
 
 ### Disclaimer 
