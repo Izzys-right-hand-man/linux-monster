@@ -1,3 +1,6 @@
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/harkerbyte/linux-monster?style=for-the-badge)
+
+
 ### Disclaimer 
 <b>I disclaim responsibility of how this tool is used, users are responsible for ensuring compliance with legal and ethical guidelines. Proceed responsibly.</b>
 
