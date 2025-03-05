@@ -50,7 +50,7 @@ sudo pip3 install [package] --break-system-packages --user
 Note after each package is installed try running python3 main.py, if an error is shown, install the package.
 
 Recommended commands:
-
+sudo pip3 install selenium --break-system-packages --user
 sudo pip3 install requests --break-system-packages --user
 sudo pip3 install bs4 --break-system-packages --user
 
