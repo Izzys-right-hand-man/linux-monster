@@ -34,6 +34,27 @@ Get the app from <a title="F-droid termux" href="https://f-droid.org/en/packages
  bash setup.sh -f requirements.txt
 ```
 
+For Mac terminal:
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+brew install python3
+
+brew install pip3
+
+git clone https://github.com/Izzys-right-hand-man/linux-monster
+
+cd linux-monster
+
+sudo pip3 install [package] --break-system-packages --user
+
+Note after each package is installed try running python3 main.py, if an error is shown, install the package.
+
+Recommended commands:
+
+sudo pip3 install requests --break-system-packages --user
+sudo pip3 install bs4 --break-system-packages --user
+
+
 [![SETUP TUTORIAL YT](https://github.com/harkerbyte/linux-monster/blob/06f6a0867368aa5b0ec853f38253da9409e1399a/data/IMG_20250302_182932.png)](https://www.youtube.com/watch?v=cc9UuUCDr4E&feature=youtu.be)
 <b>Full YouTube tutorial on how to setup Linux-Monster</b>
 
